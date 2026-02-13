@@ -34,30 +34,40 @@ To write and execute an Assembly language program to perform the factorial of a 
 ## PROGRAM
 ```asm
 ORG 0000H
-MOV DPTR,#4500H
-MOVX A,@DPTR
-MOV R0,A
-INC DPTR
-ACALL FACTORIAL
-MOVX @DPTR,A
-SJMP THIN
-FACTORIAL:DEC R0
-CJNE R0,#01H,PRODUCT
-SJMP THICK
-PRODUCT:MOV B,R0
-MUL AB
-ACALL FACTORIAL
-THICK: RET
-THIN:RET
-END
 
+        MOV     DPTR, #4500H     ; Point DPTR to input address
+        MOVX    A, @DPTR        ; Read number from external memory
+        MOV     R0, A           ; Store number in R0
+
+        INC     DPTR            ; Point to output location
+        ACALL   FACTORIAL      ; Call factorial subroutine
+
+        MOVX    @DPTR, A        ; Store result in external memory
+
+THIN:   SJMP    THIN            ; Infinite loop
+FACTORIAL:
+        DEC     R0
+
+        CJNE    R0, #01H, PRODUCT
+        SJMP    THICK
+
+PRODUCT:
+        MOV     B, R0
+        MUL     AB              ; A = A × B
+        ACALL   FACTORIAL
+
+THICK:
+        RET
+
+END
 ```
 OUTPUT
 
-(Keil output screenshot can be inserted here)
+
 
 ---
 MANUAL CALCULATIONS
+
 
 ---
 
